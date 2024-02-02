@@ -1,3 +1,9 @@
 [submodule "Aurora/vendor/glfw"]
 	path = Aurora/vendor/glfw
 	url = https://github.com/glfw/glfw/
+[submodule "Aurora/vendor/glm"]
+	path = Aurora/vendor/glm
+	url = https://github.com/g-truc/glm.git
+[submodule "Aurora/vendor/stb"]
+	path = Aurora/vendor/stb
+	url = https://github.com/nothings/stb.git

@@ -10,6 +10,7 @@
 
 #include "shader.hpp"
 #include "camera.hpp"
+#include "axis.hpp"
 
 #include <iostream>
 
@@ -24,7 +25,7 @@ const unsigned int SCR_WIDTH = 1600;
 const unsigned int SCR_HEIGHT = 900;
 
 // camera
-Camera camera(glm::vec3(0.0f, 500.0f, 0.0f));
+Camera camera(glm::vec3(0.0f, 100.0f, 0.0f));
 float lastX = SCR_WIDTH / 2.0f;
 float lastY = SCR_HEIGHT / 2.0f;
 bool firstMouse = true;
@@ -158,6 +159,8 @@ int main()
     glEnableVertexAttribArray(2);
 
 
+    Axis axis;
+
     // render loop
     // -----------
     while (!glfwWindowShouldClose(window))
@@ -178,9 +181,8 @@ int main()
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         // be sure to activate shader when setting uniforms/drawing objects
-        cubeShader.use();
 
-        glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 1000-.0f);
+        glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100000.0f);
         glm::mat4 view = camera.GetViewMatrix();
         cubeShader.setMat4("projection", projection);
         cubeShader.setMat4("view", view);
@@ -189,40 +191,57 @@ int main()
         ///// RENDER
         ////////////////////////////////////////////////////
 
+        axis.render(projection, view);
+
+
+        cubeShader.use();
+
         // render containers
         glBindVertexArray(cubeVAO);
         glm::mat4 model = glm::mat4(1.0f);
         float angle = 0.0f;
 
-        /// CUBE 1
+        /// Cube 1 - SUN
         // calculate the model matrix for each object and pass it to shader before drawing
         model = glm::mat4(1.0f);
         model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f));
         model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
-        model = glm::scale(model, glm::vec3(86.49f, 86.49f, 86.49f));
+        model = glm::scale(model, glm::vec3(1.9f, 1.9f, 1.9f));
         cubeShader.setMat4("model", model);
         cubeShader.setVec3("objectColor", glm::vec3(0.94f, 0.55f, 0.09f));
 
         glDrawArrays(GL_TRIANGLES, 0, 36);
 
 
-        // Cube 2
+        // Cube 2 - MERCURY
         // calculate the model matrix for each object and pass it to shader before drawing
         model = glm::mat4(1.0f);
         model = glm::rotate(model, 2.0f * currentFrame , glm::vec3(0.0f, 1.0f, 0.0f));
-        model = glm::translate(model, glm::vec3(2.0f, 0.0f, 0.0f));
+        model = glm::translate(model, glm::vec3(360.10f, 0.0f, 0.0f));
+        model = glm::scale(model, glm::vec3(3.024f, 3.024f, 3.024f));
         cubeShader.setMat4("model", model);
-        cubeShader.setVec3("objectColor", glm::vec3(0.25f, 0.46f, 0.55f));
+        cubeShader.setVec3("objectColor", glm::vec3(0.85f, 0.65f, 0.4f));
 
         glDrawArrays(GL_TRIANGLES, 0, 36);
 
 
-        // Cube 3
+        // Cube 3 - VENUS
         // calculate the model matrix for each object and pass it to shader before drawing
         model = glm::mat4(1.0f);
         model = glm::rotate(model, 9.0f * currentFrame , glm::vec3(0.0f, 1.0f, 0.0f));
         model = glm::translate(model, glm::vec3(5.0f, 0.0f, 0.0f));
         model = glm::scale(model, glm::vec3(2.0f, 2.0f, 2.0f));
+        cubeShader.setMat4("model", model);
+
+        glDrawArrays(GL_TRIANGLES, 0, 36);
+
+
+        // Cube 4 - EARTH
+        // calculate the model matrix for each object and pass it to shader before drawing
+        model = glm::mat4(1.0f);
+        model = glm::rotate(model, 9.0f * currentFrame , glm::vec3(0.0f, 1.0f, 0.0f));
+        model = glm::translate(model, glm::vec3(929.40f, 0.0f, 0.0f));
+        model = glm::scale(model, glm::vec3(0.7918f, 0.7918f, 0.7918f));
         cubeShader.setMat4("model", model);
 
         glDrawArrays(GL_TRIANGLES, 0, 36);
